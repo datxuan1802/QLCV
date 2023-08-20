@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TaskModule } from './task/task.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
@@ -15,7 +15,12 @@ import { AuthGuard } from './auth/auth.guard';
       isGlobal: true,
       load: [configuration],
     }),
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/task-management'),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('mongodb.uri'),
+      }),
+    }),
     UsersModule,
     TaskModule,
     AuthModule,

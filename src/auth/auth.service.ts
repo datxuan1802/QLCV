@@ -2,26 +2,34 @@ import { UsersService } from './../users/users.service';
 import { Injectable } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common/exceptions/unauthorized.exception';
 import { JwtService } from '@nestjs/jwt';
-// TODO: CREATE TYPE FOR USER
-
+import { User } from 'src/users/users.schema';
+import RegisterDto from './dto/registerDto';
+import { BadRequestException } from '@nestjs/common';
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
-  // TODO: CHANGE ANY TYPE
-  async signIn(email: string, pass: string): Promise<any> {
+  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
     const user = await this.usersService.findByEmail(email);
     if (!!!user) {
       throw new UnauthorizedException('Email not found');
     }
-    if (user.password !== pass) {
+    const isValid = await user.comparePassword(pass);
+    if (!isValid) {
       throw new UnauthorizedException('Wrong password');
     }
-    const payload = { sub: user.id, username: user.name, roles: user.roles };
+    const payload = { username: user.name, roles: user.roles };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+  async register(registerDto: RegisterDto): Promise<User> {
+    try {
+      return await this.usersService.create(registerDto);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

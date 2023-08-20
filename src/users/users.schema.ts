@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { UserRole } from 'src/enums/role.enum';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class User {
   //   @Prop({required:true})
   @Prop({ required: [true, 'Name is required'] })
@@ -24,12 +25,8 @@ export class User {
   @Prop()
   bio: string;
 
-  // TODO: create enum
   @Prop()
-  role: string;
-
-  @Prop({ default: Date.now })
-  created_at: Date;
+  roles: UserRole[];
 
   async comparePassword(attempt: string): Promise<boolean> {
     return await bcrypt.compare(attempt, this.password);
@@ -49,3 +46,9 @@ UserSchema.pre<UserDocument>('save', async function name(next) {
     return next(error);
   }
 });
+
+UserSchema.methods.comparePassword = async function (
+  attempt: string,
+): Promise<boolean> {
+  return await bcrypt.compare(attempt, this.password);
+};
