@@ -1,4 +1,18 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { Public } from 'src/decorator/isPublic.decorator';
+import { Roles } from 'src/decorator/roles.decorator';
+import { UserRole } from 'src/enums/role.enum';
+@Controller('/task')
+export class TaskController {
+  @Public()
+  @Get()
+  getAllTask() {
+    return 'get all task';
+  }
 
-@Controller('task')
-export class TaskController {}
+  @Roles(UserRole.ADMIN)
+  @Get('/admin')
+  getTaskAdmin() {
+    return 'get task admin';
+  }
+}
