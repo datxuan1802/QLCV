@@ -26,6 +26,12 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Required
+
+```
+docker-compose -f local-database-compose.yaml up
+```
+
 ## Installation
 
 ```bash
