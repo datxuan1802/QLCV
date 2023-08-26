@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
 import { RolesGuard } from './auth/roles.guard';
-import { AuthGuard } from './auth/auth.guard';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,8 +31,12 @@ import { AuthGuard } from './auth/auth.guard';
     AppService,
     {
       provide: 'APP_GUARD',
-      useClass: AuthGuard,
+      useClass: JwtAuthGuard,
     },
+    // {
+    //   provide: 'APP_GUARD',
+    //   useClass: AuthGuard,
+    // },
     {
       provide: 'APP_GUARD',
       useClass: RolesGuard,
