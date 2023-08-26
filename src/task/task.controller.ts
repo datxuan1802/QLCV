@@ -12,7 +12,7 @@ export class TaskController {
     return 'get all task';
   }
 
-  @Roles(UserRole.SUPERADMIN)
+  @Roles(UserRole.ADMIN)
   @ApiBearerAuth('access-token')
   @Get('/admin')
   getTaskAdmin() {
