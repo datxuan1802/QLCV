@@ -9,7 +9,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  @ApiBearerAuth('access-token')
   canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
       context.getHandler(),
