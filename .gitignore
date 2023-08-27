@@ -36,11 +36,8 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# personal note
-NOTE.md
-TODO.md
-FEATURES.md
-PLAN.md
+# documents
+/documents
 
 #docker
 /data
