@@ -9,6 +9,9 @@ import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
 import { RolesGuard } from './auth/roles.guard';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { MailModule } from './mail/mail.module';
+// import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,14 +24,15 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
         uri: configService.get<string>('mongodb.uri'),
       }),
     }),
+    MailModule,
     UsersModule,
     TaskModule,
     AuthModule,
-    UsersModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    // MailService,
     {
       provide: 'APP_GUARD',
       useClass: JwtAuthGuard,
