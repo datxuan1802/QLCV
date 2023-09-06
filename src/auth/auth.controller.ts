@@ -1,5 +1,5 @@
 import { AuthService } from './auth.service';
-import { Req, Post, Get, Body } from '@nestjs/common';
+import { Req, Post, Get, Body, Query, Render, Res } from '@nestjs/common';
 import { SignInDto } from './dto/signInDto';
 import {} from '@nestjs/common';
 import { Public } from 'src/decorator/isPublic.decorator';
@@ -22,6 +22,11 @@ export class AuthController {
   @ApiBody({ type: RegisterDto })
   register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
+  }
+  @Public()
+  @Get('active')
+  activeAccountByToken(@Query('token') token: string) {
+    return this.authService.activeAccountByToken(token);
   }
   //   @UseGuards(AuthGuard)
   @Get('/profile')

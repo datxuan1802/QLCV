@@ -20,13 +20,20 @@ export class User {
   @Prop({ required: [true, 'Password is required'] })
   password: string;
 
-  // @Prop()
-  // avatar: string
+  @Prop()
+  avatar: string;
+
   @Prop()
   bio: string;
 
   @Prop()
   roles: UserRole[];
+
+  @Prop({ default: false })
+  isActivated: boolean;
+
+  @Prop()
+  activeToken: string;
 
   async comparePassword(attempt: string): Promise<boolean> {
     return await bcryptjs.compare(attempt, this.password);
