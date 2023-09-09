@@ -5,6 +5,13 @@ export enum UserRole {
   VIEWER = 'Viewer',
 }
 
+//TODO: integrate later
+export enum EPolicy {
+  CREATE_WORKSPACE = 'create_workspace',
+  READ_WORKSPACE = 'read_workspace',
+  UPDATE_WORKSPACE = 'update_workspace',
+  DELETE_WORKSPACE = 'delete_workspace',
+}
 // Sure, here are some suggested roles for a task management app along with their associated permissions:
 
 // NOTE:

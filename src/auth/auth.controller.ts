@@ -4,10 +4,10 @@ import { SignInDto } from './dto/signInDto';
 import {} from '@nestjs/common';
 import { Public } from 'src/decorator/isPublic.decorator';
 import RegisterDto from './dto/registerDto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { Controller } from 'src/decorator/customController.decorator';
 
-@Controller('/auth')
+@Controller('/auth', false)
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Public()
@@ -28,6 +28,8 @@ export class AuthController {
   activeAccountByToken(@Query('token') token: string) {
     return this.authService.activeAccountByToken(token);
   }
+
+  @ApiBearerAuth('access-token')
   //   @UseGuards(AuthGuard)
   @Get('/profile')
   getProfile(@Req() req) {

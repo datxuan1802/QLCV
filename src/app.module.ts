@@ -4,29 +4,26 @@ import { AppService } from './app.service';
 import { TaskModule } from './task/task.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+// import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
 import { RolesGuard } from './auth/roles.guard';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { MailModule } from './mail/mail.module';
-// import { MailModule } from './mail/mail.module';
+import { WorkspacesModule } from './workspaces/workspaces.module';
+import { MongooseModule } from './mongoose/mongoose.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
     }),
-    MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('mongodb.uri'),
-      }),
-    }),
+    MongooseModule,
     MailModule,
     UsersModule,
     TaskModule,
     AuthModule,
+    WorkspacesModule,
   ],
   controllers: [AppController],
   providers: [
