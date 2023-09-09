@@ -12,6 +12,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { MailModule } from './mail/mail.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
 import { MongooseModule } from './mongoose/mongoose.module';
+import { BoardModule } from './board/board.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +25,7 @@ import { MongooseModule } from './mongoose/mongoose.module';
     TaskModule,
     AuthModule,
     WorkspacesModule,
+    BoardModule,
   ],
   controllers: [AppController],
   providers: [
