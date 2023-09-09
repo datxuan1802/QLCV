@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TaskModule } from './task/task.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 // import { MongooseModule } from '@nestjs/mongoose';
@@ -13,6 +12,7 @@ import { MailModule } from './mail/mail.module';
 import { WorkspacesModule } from './workspaces/workspaces.module';
 import { MongooseModule } from './mongoose/mongoose.module';
 import { BoardModule } from './board/board.module';
+import { TaskModule } from './task/task.module';
 @Module({
   imports: [
     ConfigModule.forRoot({

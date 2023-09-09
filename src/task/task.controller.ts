@@ -1,37 +1,54 @@
-import { Get, Post, Body } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { Public } from 'src/decorator/isPublic.decorator';
-import { Roles } from 'src/decorator/roles.decorator';
-import { UserRole } from 'src/enums/role.enum';
+import { Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { TaskService } from './task.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { Controller } from 'src/decorator/customController.decorator';
-import { MailService } from 'src/mail/mail.service';
-import * as fs from 'fs';
-@Controller('/task')
+import { EStatus } from './task.schema';
+import { ApiQuery } from '@nestjs/swagger';
+@Controller('task')
 export class TaskController {
-  constructor(private readonly mailService: MailService) {}
-  @Public()
-  @Get()
-  getAllTask() {
-    return 'get all task';
+  constructor(private readonly taskService: TaskService) {}
+
+  @Post('/create')
+  create(
+    @Query('boardId') boardId: string,
+    @Body() createTaskDto: CreateTaskDto,
+  ) {
+    return this.taskService.create(boardId, createTaskDto);
   }
 
-  // @Public()
-  // @Post('/send-mail')
-  // async sendMail(@Body() body: any) {
-  //   const { to, subject, text, html } = body;
-  //   const template = fs.readFileSync('./src/templates/test-email.html', 'utf8');
-  //   const personalizedHtml = template.replace('{{ name }}', html);
-  //   try {
-  //     await this.mailService.sendMail(to, subject, text, personalizedHtml);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   return { message: 'Email sent successfully' };
-  // }
-  @Roles(UserRole.ADMIN)
-  @ApiBearerAuth('access-token')
-  @Get('/admin')
-  getTaskAdmin() {
-    return 'get task admin';
+  @Get()
+  findAll() {
+    return this.taskService.findAll();
+  }
+  @Get('/findByBoardId/:boardId')
+  findByBoardId(@Param('boardId') boardId: string) {
+    return this.taskService.findByBoardId(boardId);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.taskService.findOne(+id);
+  }
+
+  @Patch('update/:taskId')
+  update(
+    @Param('taskId') taskId: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ) {
+    return this.taskService.update(taskId, updateTaskDto);
+  }
+  @Patch('/update-status/:taskId')
+  @ApiQuery({ name: 'status', required: true, enum: EStatus })
+  updateStatus(
+    @Param('taskId') taskId: string,
+    @Query('status') status: EStatus,
+  ) {
+    return this.taskService.updateStatus(taskId, status);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.taskService.remove(+id);
   }
 }
