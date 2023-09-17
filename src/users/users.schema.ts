@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import * as bcryptjs from 'bcryptjs';
 import { UserRole } from 'src/enums/role.enum';
 
@@ -8,6 +8,9 @@ export type UserDocument = HydratedDocument<User>;
 @Schema({ timestamps: true })
 export class User {
   //   @Prop({required:true})
+  @Prop({ type: Types.ObjectId })
+  _id: Types.ObjectId;
+
   @Prop({ required: [true, 'Name is required'] })
   name: string;
 

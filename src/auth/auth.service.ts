@@ -13,7 +13,10 @@ export class AuthService {
     private jwtService: JwtService,
     private mailService: MailService,
   ) {}
-  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
+  async signIn(
+    email: string,
+    pass: string,
+  ): Promise<{ access_token: string; user: any }> {
     const user = await this.usersService.findByEmail(email);
     if (!!!user) {
       throw new UnauthorizedException('Email not found');
@@ -25,9 +28,15 @@ export class AuthService {
     if (!isValid) {
       throw new UnauthorizedException('Wrong password');
     }
+    console.log(user);
     const payload = { username: user.name, roles: user.roles };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      user: {
+        name: user.name,
+        email: user.email,
+        _id: user._id,
+      },
     };
   }
   async register(registerDto: RegisterDto): Promise<User> {
