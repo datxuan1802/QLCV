@@ -1,28 +1,48 @@
-import { UsersService } from './../users/users.service';
-import { Post, Body, Get, Query, Put } from '@nestjs/common';
+import { getObjectId } from './../utils/helper';
+import { WorkspacePermission } from './../workspace-permission/workspace-permission.schema';
+import { Workspace } from './workspaces.schema';
+import { Post, Body, Get, Query, Put, Req } from '@nestjs/common';
 import { Controller } from 'src/decorator/customController.decorator';
-import { WorkspacesService } from './workspaces.service';
 import { ApiBody } from '@nestjs/swagger';
+//mongo
+import { Types, ObjectId } from 'mongoose';
+// dto
 import { createWorkspaceDTO } from './dto/createWorkspaceDTO';
 import { updateWorkspaceDTO } from './dto/updateWorkspaceDTO';
+// services
+import { WorkspacesService } from './workspaces.service';
+import { UsersService } from './../users/users.service';
+import { WorkspacePermissionService } from 'src/workspace-permission/workspace-permission.service';
+
 import { Roles } from 'src/decorator/roles.decorator';
 import { UserRole } from 'src/enums/role.enum';
 import { User } from 'src/users/users.schema';
+import { CreateWorkspacePermissionDto } from 'src/workspace-permission/dto/create-workspace-permission.dto';
 
 @Controller('/workspaces')
 export class WorkspacesController {
   constructor(
     private workspaceService: WorkspacesService,
     private userService: UsersService,
+    private workspacePermissionService: WorkspacePermissionService,
   ) {}
   @ApiBody({ type: createWorkspaceDTO })
   @Post('/create')
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
-  create(
-    @Query('ownerId') ownerId: string,
-    @Body() createWorkspaceDTO: createWorkspaceDTO,
-  ) {
-    return this.workspaceService.create(ownerId, createWorkspaceDTO);
+  async create(@Req() req, @Body() createWorkspaceDTO: createWorkspaceDTO) {
+    const workspace = await this.workspaceService.create(
+      req.user._id,
+      createWorkspaceDTO,
+    );
+    const WorkspacePermissionDTO: CreateWorkspacePermissionDto = {
+      user: new Types.ObjectId(req.user._id),
+      owner: new Types.ObjectId(req.user._id),
+      workspace: new Types.ObjectId(workspace._id),
+      roles: [UserRole.ADMIN, UserRole.MANAGER],
+    };
+
+    this.workspacePermissionService.create(WorkspacePermissionDTO);
+    return workspace;
   }
 
   @Get('/all')
@@ -40,20 +60,25 @@ export class WorkspacesController {
   findById(@Query('workspaceId') workspaceId: string) {
     return this.workspaceService.findById(workspaceId);
   }
+  @Get('/permission/findByUserId')
+  findPermissionByUserId(@Req() req) {
+    return this.workspacePermissionService.findByUserId(req.user._id);
+  }
 
   @Put('/update')
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
   update(
-    @Query('ownerId') ownerId: string,
+    @Req() req,
     @Query('workspaceId') workspaceId: string,
     @Body() updateWorkspaceDTO: updateWorkspaceDTO,
   ) {
     return this.workspaceService.update(
-      ownerId,
+      req.user._id,
       workspaceId,
       updateWorkspaceDTO,
     );
   }
+
   // @Roles(UserRole.ADMIN,User.MANAGER)
   // @ApiBody({ type: updateWorkspaceDTO})
 }

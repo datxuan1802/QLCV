@@ -28,14 +28,19 @@ export class AuthService {
     if (!isValid) {
       throw new UnauthorizedException('Wrong password');
     }
-    console.log(user);
-    const payload = { username: user.name, roles: user.roles };
+    const payload = {
+      name: user.name,
+      roles: user.roles,
+      email,
+      _id: user._id,
+    };
     return {
       access_token: await this.jwtService.signAsync(payload),
       user: {
         name: user.name,
         email: user.email,
         _id: user._id,
+        roles: user.roles,
       },
     };
   }

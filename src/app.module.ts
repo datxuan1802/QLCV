@@ -13,6 +13,7 @@ import { WorkspacesModule } from './workspaces/workspaces.module';
 import { MongooseModule } from './mongoose/mongoose.module';
 import { BoardModule } from './board/board.module';
 import { TaskModule } from './task/task.module';
+import { WorkspacePermissionModule } from './workspace-permission/workspace-permission.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,6 +27,7 @@ import { TaskModule } from './task/task.module';
     AuthModule,
     WorkspacesModule,
     BoardModule,
+    WorkspacePermissionModule,
   ],
   controllers: [AppController],
   providers: [

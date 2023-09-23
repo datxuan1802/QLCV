@@ -1,5 +1,7 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import mongoose, { Document, SchemaTypes, Types } from 'mongoose';
+import { Board } from 'src/board/board.schema';
+import { User } from 'src/users/users.schema';
 
 export enum EWorkspaceType {
   PUBLIC = 'public',
@@ -7,6 +9,11 @@ export enum EWorkspaceType {
 }
 @Schema({ timestamps: true })
 export class Workspace extends Document {
+  // @Prop({ type: Types.ObjectId })
+  // _id: Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
+
+
   @Prop()
   name: string;
 
@@ -21,7 +28,11 @@ export class Workspace extends Document {
     ref: 'User',
     required: [true, 'ownerId is required'],
   }) // Use Types.ObjectId and set the ref to the User model
-  ownerId: Types.ObjectId;
+  owner: User;
+
+ // Use Types.ObjectId and set the ref to the User model
+ @Prop({ type: [SchemaTypes.ObjectId], ref: 'Board', required: true })
+  boards: Board[];
 }
 
 export const WorkspaceSchema = SchemaFactory.createForClass(Workspace);
