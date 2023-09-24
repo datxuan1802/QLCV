@@ -1,5 +1,5 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 
 export enum EPriority {
   HIGH = 'high',
@@ -21,6 +21,8 @@ export enum ETimeDoneTask {
 
 @Schema({ timestamps: true })
 export class Task extends Document {
+  _id: mongoose.Types.ObjectId;
+
   @Prop({
     type: Types.ObjectId,
     ref: 'Board',
@@ -68,24 +70,24 @@ export class Task extends Document {
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
 
-TaskSchema.methods.setTimeDone = async function (status: EStatus) {
-  if (status === EStatus.DONE) {
-    if (this.updatedAt < new Date()) {
-      console.log('EStatus.DONE');
-      this.timeDone = ETimeDoneTask.SOON;
-    }
-    if (this.updatedAt === new Date()) {
-      console.log('EStatus.DONE');
-      this.timeDone = ETimeDoneTask.ONTIME;
-    }
-    if (this.updatedAt > new Date()) {
-      console.log('EStatus.DONE');
-      this.timeDone = ETimeDoneTask.OVERDUE;
-    }
-  }
-  console.log(this.timeDone);
+// TaskSchema.methods.setTimeDone = async function (status: EStatus) {
+//   if (status === EStatus.DONE) {
+//     if (this.updatedAt < new Date()) {
+//       console.log('EStatus.DONE');
+//       this.timeDone = ETimeDoneTask.SOON;
+//     }
+//     if (this.updatedAt === new Date()) {
+//       console.log('EStatus.DONE');
+//       this.timeDone = ETimeDoneTask.ONTIME;
+//     }
+//     if (this.updatedAt > new Date()) {
+//       console.log('EStatus.DONE');
+//       this.timeDone = ETimeDoneTask.OVERDUE;
+//     }
+//   }
+//   console.log(this.timeDone);
 
-  this.updatedAt = new Date();
-};
+//   this.updatedAt = new Date();
+// };
 
 // create method check task is Done in due date or not

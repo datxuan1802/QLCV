@@ -22,8 +22,17 @@ export class TaskController {
     return this.taskService.findAll();
   }
   @Get('/findByBoardId/:boardId')
-  findByBoardId(@Param('boardId') boardId: string) {
-    return this.taskService.findByBoardId(boardId);
+  @ApiQuery({
+    name: 'status',
+    enum: EStatus,
+    description: 'Filter tasks by status',
+    required: false,
+  })
+  findByBoardId(
+    @Param('boardId') boardId: string,
+    @Query('status') status: EStatus,
+  ) {
+    return this.taskService.findByBoardId(boardId, status);
   }
 
   @Get(':id')

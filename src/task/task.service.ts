@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ETimeDoneTask, Task } from './task.schema';
 import { EStatus } from './task.schema';
+import { getObjectId } from 'src/utils/helper';
 
 @Injectable()
 export class TaskService {
@@ -17,8 +18,15 @@ export class TaskService {
   async findAll() {
     return await this.taskRepository.find();
   }
-  async findByBoardId(boardId: string) {
-    return await this.taskRepository.find({ boardId });
+  async findByBoardId(boardId: string, status: EStatus) {
+    const queryOptions: any = {
+      boardId,
+    };
+
+    if (status) {
+      queryOptions.status = status;
+    }
+    return await this.taskRepository.find(queryOptions);
   }
 
   assignTaskToUser() {
@@ -35,7 +43,7 @@ export class TaskService {
 
   // check assignId and ownerId laster
   async updateStatus(taskId: string, status: EStatus) {
-    const targetTask = await this.taskRepository.findById(taskId);
+    const targetTask = await this.taskRepository.findById(getObjectId(taskId));
     if (status === EStatus.DONE && targetTask.status !== EStatus.DONE) {
       const now = new Date();
       const dueDate = targetTask.dueDate;
@@ -62,9 +70,12 @@ export class TaskService {
           });
       }
     } else {
-      return await this.taskRepository.findByIdAndUpdate(taskId, { status });
+      const targetTask = await this.taskRepository.findByIdAndUpdate(taskId, {
+        status,
+      });
+      targetTask.save();
+      return targetTask;
     }
-    // const targetTask = this.taskRepository.findByIdAndUpdate(taskId, { status });
   }
 
   remove(id: number) {
