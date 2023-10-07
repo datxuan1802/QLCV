@@ -68,6 +68,10 @@ export class WorkspacesController {
     return this.workspacePermissionService.findByUserId(req.user._id);
   }
 
+  @Get('/getMembers')
+  getMembers(@Query('workspaceId') workspaceId: string) {
+    return this.workspacePermissionService.getMembersByWorkspaceId(workspaceId);
+  }
   @Put('/update')
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
   update(

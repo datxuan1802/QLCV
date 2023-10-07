@@ -38,6 +38,17 @@ export class WorkspacePermissionService {
       .exec();
   }
 
+  getMembersByWorkspaceId(workspaceId: string) {
+    return this.workspacePermissionModel
+      .find({
+        workspace: getObjectId(workspaceId),
+        isAccessInvite: true,
+      })
+      .populate({
+        path: 'user',
+      });
+  }
+
   update(
     workspacePermissionId: string,
     updateWorkspacePermissionDto: UpdateWorkspacePermissionDto,
