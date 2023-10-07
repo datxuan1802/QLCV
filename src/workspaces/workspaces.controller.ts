@@ -1,3 +1,4 @@
+import { MailService } from './../mail/mail.service';
 import { getObjectId } from './../utils/helper';
 import { WorkspacePermission } from './../workspace-permission/workspace-permission.schema';
 import { Workspace } from './workspaces.schema';
@@ -18,6 +19,7 @@ import { Roles } from 'src/decorator/roles.decorator';
 import { UserRole } from 'src/enums/role.enum';
 import { User } from 'src/users/users.schema';
 import { CreateWorkspacePermissionDto } from 'src/workspace-permission/dto/create-workspace-permission.dto';
+import { Public } from 'src/decorator/isPublic.decorator';
 
 @Controller('/workspaces')
 export class WorkspacesController {
@@ -25,6 +27,7 @@ export class WorkspacesController {
     private workspaceService: WorkspacesService,
     private userService: UsersService,
     private workspacePermissionService: WorkspacePermissionService,
+    private mailService: MailService,
   ) {}
   @ApiBody({ type: createWorkspaceDTO })
   @Post('/create')
@@ -77,6 +80,41 @@ export class WorkspacesController {
       workspaceId,
       updateWorkspaceDTO,
     );
+  }
+
+  @Post('/assign-member')
+  @Roles(UserRole.ADMIN, UserRole.MANAGER)
+  async assignMember(
+    @Req() req,
+    @Query('workspaceId') workspaceId: string,
+    @Query('userId') userId: string,
+  ) {
+    const WorkspacePermissionDTO: CreateWorkspacePermissionDto = {
+      user: new Types.ObjectId(userId),
+      owner: new Types.ObjectId(req.user._id),
+      workspace: new Types.ObjectId(workspaceId),
+      roles: [UserRole.MEMBER],
+      isAccessInvite: false,
+    };
+
+    const newPermission = await this.workspacePermissionService.create(
+      WorkspacePermissionDTO,
+    );
+    await this.mailService.sendAccessInvite(
+      'trungdev26072001@gmail.com',
+      newPermission._id,
+    );
+    return newPermission;
+  }
+
+  @Get('/access-invite')
+  @Public()
+  async accessInvite(
+    @Query('workspacePermissionId') workspacePermissionId: string,
+  ) {
+    return await this.workspacePermissionService.update(workspacePermissionId, {
+      isAccessInvite: true,
+    });
   }
 
   // @Roles(UserRole.ADMIN,User.MANAGER)

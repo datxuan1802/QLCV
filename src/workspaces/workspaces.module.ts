@@ -13,6 +13,7 @@ import {
 import { WorkspacePermissionService } from 'src/workspace-permission/workspace-permission.service';
 import { BoardService } from 'src/board/board.service';
 import { Board, BoardSchema } from 'src/board/board.schema';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Board, BoardSchema } from 'src/board/board.schema';
         schema: BoardSchema,
       },
     ]),
+    MailModule,
   ],
   providers: [
     WorkspacesService,

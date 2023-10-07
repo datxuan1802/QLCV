@@ -21,4 +21,23 @@ export class MailService {
       throw new BadRequestException(error);
     }
   }
+
+  async sendAccessInvite(
+    email: string,
+    workspacePermissionId: string,
+  ): Promise<void> {
+    const accessLink = `http://localhost:5556/api/v1/workspaces/access-invite?workspacePermissionId=${workspacePermissionId}`;
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject: 'Xác nhận lời mời',
+        template: './access',
+        context: {
+          accessLink,
+        },
+      });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 }

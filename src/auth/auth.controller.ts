@@ -35,4 +35,10 @@ export class AuthController {
   getProfile(@Req() req) {
     return req.user;
   }
+
+  @ApiBearerAuth('access-token')
+  @Get('/find-by-email')
+  async findByEmail(@Query('email') email: string) {
+    return await this.authService.findUserByEmail(email);
+  }
 }

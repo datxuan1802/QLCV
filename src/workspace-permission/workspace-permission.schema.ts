@@ -33,6 +33,12 @@ export class WorkspacePermission extends Document {
 
   @Prop()
   roles: UserRole[];
+
+  @Prop({
+    type: Boolean,
+    default: true,
+  })
+  isAccessInvite: boolean;
 }
 
 export const WorkspacePermissionSchema =

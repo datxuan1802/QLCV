@@ -64,4 +64,12 @@ export class AuthService {
       throw new BadRequestException(error);
     }
   }
+  async findUserByEmail(email: string): Promise<User> {
+    try {
+      return this.usersService.findByEmail(email);
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException('Không tìm thấy user');
+    }
+  }
 }

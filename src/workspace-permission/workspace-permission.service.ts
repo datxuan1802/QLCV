@@ -21,8 +21,8 @@ export class WorkspacePermissionService {
   findAll() {
     return `This action returns all workspacePermission`;
   }
-  findOne(id: number) {
-    return `This action returns all workspacePermission`;
+  findOne(id: string) {
+    return this.workspacePermissionModel.findById(id).exec();
   }
 
   findByUserId(userId: string) {
@@ -39,10 +39,12 @@ export class WorkspacePermissionService {
   }
 
   update(
-    id: number,
+    workspacePermissionId: string,
     updateWorkspacePermissionDto: UpdateWorkspacePermissionDto,
   ) {
-    return `This action updates a #${id} workspacePermission`;
+    return this.workspacePermissionModel
+      .findByIdAndUpdate(workspacePermissionId, updateWorkspacePermissionDto)
+      .exec();
   }
 
   remove(id: number) {

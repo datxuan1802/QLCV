@@ -5,4 +5,5 @@ export class CreateWorkspacePermissionDto {
   owner: any;
   workspace: Types.ObjectId;
   roles: UserRole[];
+  isAccessInvite?: Boolean;
 }
