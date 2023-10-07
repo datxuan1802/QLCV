@@ -82,7 +82,7 @@ export class WorkspacesController {
     );
   }
 
-  @Post('/assign-member')
+  @Post('/invite-member')
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async assignMember(
     @Req() req,
