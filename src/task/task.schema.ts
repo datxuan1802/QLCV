@@ -1,5 +1,6 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
+import { User } from 'src/users/users.schema';
 
 export enum EPriority {
   HIGH = 'high',
@@ -38,10 +39,15 @@ export class Task extends Document {
   //   ownerId: Types.ObjectId;
 
   @Prop({
-    type: Types.ObjectId,
-    ref: 'User',
+    type: [
+      {
+        type: Types.ObjectId,
+        ref: 'User',
+        required: [true, 'AssignIds is required'],
+      },
+    ],
   })
-  assignId: Types.ObjectId;
+  assignIds: User[];
 
   @Prop({ default: 'New Task' })
   name: string;
@@ -57,6 +63,9 @@ export class Task extends Document {
 
   @Prop({ required: [true, 'Due date is required'] })
   dueDate: Date;
+
+  @Prop({ default: Date.now })
+  startDate: Date;
 
   @Prop()
   bg_url: String;

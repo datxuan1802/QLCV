@@ -33,8 +33,11 @@ export class TaskService {
     return `This action returns all task`;
   }
 
-  findOne(taskId: string) {
-    return this.taskRepository.findById(getObjectId(taskId));
+  async findOne(taskId: string) {
+    return this.taskRepository
+      .findById(getObjectId(taskId))
+      .populate('assignIds', '_id name avatar')
+      .exec();
   }
 
   update(taskId: string, updateTaskDto: UpdateTaskDto) {
