@@ -33,8 +33,8 @@ export class TaskService {
     return `This action returns all task`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  findOne(taskId: string) {
+    return this.taskRepository.findById(getObjectId(taskId));
   }
 
   update(taskId: string, updateTaskDto: UpdateTaskDto) {
