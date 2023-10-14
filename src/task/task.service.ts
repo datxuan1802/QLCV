@@ -26,7 +26,9 @@ export class TaskService {
     if (status) {
       queryOptions.status = status;
     }
-    return await this.taskRepository.find(queryOptions);
+    return await this.taskRepository
+      .find(queryOptions)
+      .populate('assignIds', '_id name avatar');
   }
 
   assignTaskToUser() {
