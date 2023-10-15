@@ -7,7 +7,7 @@ export class MailService {
 
   async sendActivationEmail(email: string, token: string): Promise<void> {
     const activeLink = `http://localhost:5556/api/v1/auth/active?token=${token}`;
-
+    const logoSrc = '../images/leadership.png';
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -15,6 +15,7 @@ export class MailService {
         template: './confirm',
         context: {
           activeLink,
+          logoSrc,
         },
       });
     } catch (error) {

@@ -25,8 +25,9 @@ export class AuthController {
   }
   @Public()
   @Get('active')
-  activeAccountByToken(@Query('token') token: string) {
-    return this.authService.activeAccountByToken(token);
+  activeAccountByToken(@Query('token') token: string, @Res() res) {
+    this.authService.activeAccountByToken(token);
+    res.redirect('http://localhost:5173/login');
   }
 
   @ApiBearerAuth('access-token')
