@@ -14,6 +14,7 @@ import { MongooseModule } from './mongoose/mongoose.module';
 import { BoardModule } from './board/board.module';
 import { TaskModule } from './task/task.module';
 import { WorkspacePermissionModule } from './workspace-permission/workspace-permission.module';
+import { S3UploadModule } from './s3-upload/s3-upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +29,7 @@ import { WorkspacePermissionModule } from './workspace-permission/workspace-perm
     WorkspacesModule,
     BoardModule,
     WorkspacePermissionModule,
+    S3UploadModule,
   ],
   controllers: [AppController],
   providers: [
