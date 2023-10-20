@@ -22,10 +22,19 @@ export class User {
   @Prop({ required: [true, 'Password is required'] })
   password: string;
 
-  @Prop()
+  @Prop({
+    default:
+      'https://trung-storage.s3.ap-southeast-1.amazonaws.com/avatar/user.png',
+  })
   avatar: string;
 
-  @Prop()
+  @Prop({
+    default:
+      'https://trung-storage.s3.ap-southeast-1.amazonaws.com/user-bg/user-background1.jpg',
+  })
+  background: string;
+
+  @Prop({ default: 'This is my bio' })
   bio: string;
 
   @Prop()

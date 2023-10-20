@@ -72,4 +72,20 @@ export class AuthService {
       throw new BadRequestException('Không tìm thấy user');
     }
   }
+
+  async findUserById(id: string): Promise<User> {
+    try {
+      return this.usersService.findById(id);
+    } catch (error) {
+      throw new BadRequestException('Kh.TabControlService.findUserById');
+    }
+  }
+
+  async update(id: string, updateUserDto: any): Promise<any> {
+    try {
+      return this.usersService.update(id, updateUserDto);
+    } catch (error) {
+      throw new BadRequestException('Kh.TabControlService.update');
+    }
+  }
 }

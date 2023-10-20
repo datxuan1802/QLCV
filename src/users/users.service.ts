@@ -1,3 +1,4 @@
+import { UpdateUserDto } from './dto/update-user.dto';
 import RegisterDto from 'src/auth/dto/registerDto';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,6 +12,10 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User | undefined> {
     return this.userModel.findOne({ email }).exec();
+  }
+
+  async findById(userId: string): Promise<User | undefined> {
+    return this.userModel.findById(userId, { password: 0 }).exec();
   }
 
   async activeToken(activeToken: string): Promise<any> {
@@ -30,5 +35,9 @@ export class UsersService {
   async create(registerDto: RegisterDto): Promise<User> {
     const activeToken = uuidv4();
     return this.userModel.create({ ...registerDto, activeToken });
+  }
+
+  async update(userId: string, updateUserDto: UpdateUserDto): Promise<any> {
+    return this.userModel.findByIdAndUpdate(userId, updateUserDto).exec();
   }
 }
