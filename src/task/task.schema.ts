@@ -67,10 +67,7 @@ export class Task extends Document {
   @Prop({ default: Date.now })
   startDate: Date;
 
-  @Prop({
-    default:
-      'https://trung-storage.s3.ap-southeast-1.amazonaws.com/task-bg/background1.jpg',
-  })
+  @Prop()
   bg_url: String;
 
   @Prop({ default: null })
