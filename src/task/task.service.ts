@@ -40,7 +40,8 @@ export class TaskService {
     }
     return await this.taskRepository
       .find(queryOptions)
-      .populate('assignIds', '_id name avatar');
+      .populate('assignIds', '_id name avatar')
+      .sort({ order: 1 });
   }
 
   assignTaskToUser() {
