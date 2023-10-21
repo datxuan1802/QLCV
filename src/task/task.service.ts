@@ -12,7 +12,19 @@ export class TaskService {
   constructor(@InjectModel(Task.name) private taskRepository: Model<Task>) {}
 
   async create(boardId: string, createTaskDto: CreateTaskDto) {
-    return await this.taskRepository.create({ ...createTaskDto, boardId });
+    const maxOrderTask = await this.taskRepository
+      .findOne({
+        boardId,
+      })
+      .sort({ order: -1 })
+      .exec();
+
+    const order: number = maxOrderTask ? maxOrderTask.order + 1 : 0;
+    return await this.taskRepository.create({
+      ...createTaskDto,
+      boardId,
+      order,
+    });
   }
 
   async findAll() {

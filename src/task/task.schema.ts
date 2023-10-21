@@ -70,6 +70,9 @@ export class Task extends Document {
   @Prop()
   bg_url: String;
 
+  @Prop({ default: 0 })
+  order: number;
+
   @Prop({ default: null })
   timeDone: ETimeDoneTask;
 
@@ -78,6 +81,8 @@ export class Task extends Document {
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
+
+const TaskModel = mongoose.model<Task>('Task', TaskSchema);
 
 // TaskSchema.methods.setTimeDone = async function (status: EStatus) {
 //   if (status === EStatus.DONE) {
