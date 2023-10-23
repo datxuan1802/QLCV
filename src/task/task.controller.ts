@@ -1,10 +1,13 @@
+import { GenerateTaskDto } from './dto/generate-task.dto';
 import { Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Controller } from 'src/decorator/customController.decorator';
-import { EStatus } from './task.schema';
+import { EPriority, EStatus } from './task.schema';
 import { ApiQuery } from '@nestjs/swagger';
+import { randomAssignIds, randomDate, randomEnum } from 'src/utils/helper';
+import moment from 'moment';
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
@@ -15,6 +18,29 @@ export class TaskController {
     @Body() createTaskDto: CreateTaskDto,
   ) {
     return this.taskService.create(boardId, createTaskDto);
+  }
+  @Post('/generate-task')
+  async generateTask(
+    @Query('boardId') boardId: string,
+    @Query('quantity') quantity: number,
+    @Body() generateTask: GenerateTaskDto,
+  ) {
+    for (let i = 0; i < quantity; i++) {
+      const task = {
+        boardId,
+        name: `Task ${i + 1}`,
+        description: `Description Task ${i + 1}`,
+        priority: randomEnum(EPriority),
+        status: randomEnum(EStatus),
+        startDate: new Date(),
+        dueDate: randomDate(),
+        assignIds: randomAssignIds(generateTask.assignIds),
+      };
+      await this.taskService.generate(task);
+    }
+    return {
+      message: 'Generate task successfully',
+    };
   }
 
   @Get()

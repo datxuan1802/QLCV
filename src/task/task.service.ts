@@ -27,6 +27,10 @@ export class TaskService {
     });
   }
 
+  async generate(generateTask: any) {
+    return await this.taskRepository.create(generateTask);
+  }
+
   async findAll() {
     return await this.taskRepository.find();
   }
