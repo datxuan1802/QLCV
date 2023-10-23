@@ -82,8 +82,6 @@ export class Task extends Document {
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
 
-const TaskModel = mongoose.model<Task>('Task', TaskSchema);
-
 // TaskSchema.methods.setTimeDone = async function (status: EStatus) {
 //   if (status === EStatus.DONE) {
 //     if (this.updatedAt < new Date()) {
