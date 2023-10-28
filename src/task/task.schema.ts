@@ -64,6 +64,9 @@ export class Task extends Document {
   @Prop({ required: [true, 'Due date is required'] })
   dueDate: Date;
 
+  @Prop({ default: null })
+  doneAt: Date;
+
   @Prop({ default: Date.now })
   startDate: Date;
 
@@ -81,6 +84,21 @@ export class Task extends Document {
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
+
+TaskSchema.pre(['findOneAndUpdate'], function (next) {
+  const update: any = this.getUpdate();
+  // console.log('up', update);
+  if (update.status === EStatus.DONE) {
+    update['$set'].doneAt = new Date();
+  }
+  next();
+});
+// TaskSchema.pre('save', function (next) {
+//   if (this.status === EStatus.DONE) {
+//     this.doneAt = new Date();
+//   }
+//   next();
+// });
 
 // TaskSchema.methods.setTimeDone = async function (status: EStatus) {
 //   if (status === EStatus.DONE) {

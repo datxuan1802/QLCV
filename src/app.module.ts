@@ -15,6 +15,7 @@ import { BoardModule } from './board/board.module';
 import { TaskModule } from './task/task.module';
 import { WorkspacePermissionModule } from './workspace-permission/workspace-permission.module';
 import { S3UploadModule } from './s3-upload/s3-upload.module';
+import { ReportModule } from './report/report.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,6 +31,7 @@ import { S3UploadModule } from './s3-upload/s3-upload.module';
     BoardModule,
     WorkspacePermissionModule,
     S3UploadModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [
