@@ -16,12 +16,14 @@ import { TaskModule } from './task/task.module';
 import { WorkspacePermissionModule } from './workspace-permission/workspace-permission.module';
 import { S3UploadModule } from './s3-upload/s3-upload.module';
 import { ReportModule } from './report/report.module';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
     }),
+    ScheduleModule.forRoot(),
     MongooseModule,
     MailModule,
     UsersModule,

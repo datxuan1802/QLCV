@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Board, BoardSchema } from 'src/board/board.schema';
 import { Task, TaskSchema } from 'src/task/task.schema';
 import { User, UserSchema } from 'src/users/users.schema';
+import { MailService } from 'src/mail/mail.service';
 
 @Module({
   imports: [
@@ -25,6 +26,6 @@ import { User, UserSchema } from 'src/users/users.schema';
     ]),
   ],
   controllers: [ReportController],
-  providers: [ReportService],
+  providers: [ReportService, MailService],
 })
 export class ReportModule {}
