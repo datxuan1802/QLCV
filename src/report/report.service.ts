@@ -45,10 +45,8 @@ export class ReportService {
   })
   async handleCron() {
     const users = await this.userRepository.find({}, 'email').exec();
-    this.logger.log(users);
     for (const user of users) {
       await this.mailService.sendReportEmail(user.email);
     }
-    // return 'Hello from cron';
   }
 }
