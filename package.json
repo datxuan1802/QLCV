@@ -28,8 +28,10 @@
     "@nestjs/mongoose": "^10.0.1",
     "@nestjs/passport": "^10.0.1",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-socket.io": "^10.2.7",
     "@nestjs/schedule": "^4.0.0",
     "@nestjs/swagger": "^7.1.8",
+    "@nestjs/websockets": "^10.2.7",
     "aws-sdk": "^2.1476.0",
     "bcryptjs": "^2.4.3",
     "handlebars": "^4.7.8",
@@ -42,6 +44,7 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "socket.io-client": "^4.7.2",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {

@@ -18,6 +18,8 @@ import { S3UploadModule } from './s3-upload/s3-upload.module';
 import { ReportModule } from './report/report.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SubTaskModule } from './sub-task/sub-task.module';
+import { MessageModule } from './message/message.module';
+import { MessageGateway } from './message/message.gateway';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,6 +38,7 @@ import { SubTaskModule } from './sub-task/sub-task.module';
     S3UploadModule,
     ReportModule,
     SubTaskModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [
