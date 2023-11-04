@@ -14,6 +14,7 @@ import { WorkspacePermissionService } from 'src/workspace-permission/workspace-p
 import { BoardService } from 'src/board/board.service';
 import { Board, BoardSchema } from 'src/board/board.schema';
 import { MailModule } from 'src/mail/mail.module';
+import { WorkspacesGateway } from './workspaces.gateway';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { MailModule } from 'src/mail/mail.module';
     UsersService,
     WorkspacePermissionService,
     BoardService,
+    WorkspacesGateway,
   ],
   controllers: [WorkspacesController],
 })

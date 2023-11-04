@@ -54,7 +54,10 @@ export class WorkspacePermissionService {
     updateWorkspacePermissionDto: UpdateWorkspacePermissionDto,
   ) {
     return this.workspacePermissionModel
-      .findByIdAndUpdate(workspacePermissionId, updateWorkspacePermissionDto)
+      .findByIdAndUpdate(workspacePermissionId, updateWorkspacePermissionDto, {
+        new: true,
+      })
+      .populate('user', '_id name avatar') // Assuming 'user' is a reference to another collection
       .exec();
   }
 

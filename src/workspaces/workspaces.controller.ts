@@ -1,3 +1,4 @@
+import { WorkspacesGateway } from './workspaces.gateway';
 import { MailService } from './../mail/mail.service';
 import { getObjectId } from './../utils/helper';
 import { WorkspacePermission } from './../workspace-permission/workspace-permission.schema';
@@ -28,6 +29,7 @@ export class WorkspacesController {
     private userService: UsersService,
     private workspacePermissionService: WorkspacePermissionService,
     private mailService: MailService,
+    private readonly workspacesGateway: WorkspacesGateway,
   ) {}
   @ApiBody({ type: createWorkspaceDTO })
   @Post('/create')
@@ -116,9 +118,15 @@ export class WorkspacesController {
   async accessInvite(
     @Query('workspacePermissionId') workspacePermissionId: string,
   ) {
-    return await this.workspacePermissionService.update(workspacePermissionId, {
-      isAccessInvite: true,
-    });
+    const accessInvite = await this.workspacePermissionService.update(
+      workspacePermissionId,
+      {
+        isAccessInvite: true,
+      },
+    );
+
+    this.workspacesGateway.sendEventToClients(accessInvite?.user);
+    return accessInvite;
   }
 
   // @Roles(UserRole.ADMIN,User.MANAGER)
