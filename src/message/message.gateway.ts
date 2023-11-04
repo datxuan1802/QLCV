@@ -56,7 +56,6 @@ export class MessageGateway implements OnGatewayConnection {
       message: data.message,
     };
 
-    console.log(task_id, user_id);
     const createComment = await this.messageService.create(createMessageDto);
     const returnData = await createComment.populate('user', '_id name avatar');
     this.server.to(task_id).emit('receive-comment', returnData);
