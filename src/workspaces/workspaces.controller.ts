@@ -94,6 +94,7 @@ export class WorkspacesController {
     @Req() req,
     @Query('workspaceId') workspaceId: string,
     @Query('userId') userId: string,
+    @Query('email') email: string,
   ) {
     const WorkspacePermissionDTO: CreateWorkspacePermissionDto = {
       user: new Types.ObjectId(userId),
@@ -106,10 +107,7 @@ export class WorkspacesController {
     const newPermission = await this.workspacePermissionService.create(
       WorkspacePermissionDTO,
     );
-    await this.mailService.sendAccessInvite(
-      'trungdev26072001@gmail.com',
-      newPermission._id,
-    );
+    await this.mailService.sendAccessInvite(email, newPermission._id);
     return newPermission;
   }
 
@@ -124,8 +122,9 @@ export class WorkspacesController {
         isAccessInvite: true,
       },
     );
-
-    this.workspacesGateway.sendEventToClients(accessInvite?.user);
+    if (accessInvite) {
+      this.workspacesGateway.sendEventToClients(accessInvite);
+    }
     return accessInvite;
   }
 
