@@ -1,7 +1,6 @@
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageService } from './message.service';
 import { Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import {
   ConnectedSocket,
   MessageBody,
@@ -9,12 +8,8 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
-import { Model } from 'mongoose';
 import { Server, Socket } from 'socket.io';
-import { Public } from 'src/decorator/isPublic.decorator';
-import { Message } from './message.schema';
 import { getObjectId } from 'src/utils/helper';
 
 // @Public()
