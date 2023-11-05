@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import { Task } from 'src/task/task.schema';
 @Injectable()
 export class MailService {
   constructor(private readonly mailerService: MailerService) {}
@@ -70,6 +71,29 @@ export class MailService {
         text: 'Hey guy, I have some report for you',
         html: reportHtml,
         // template: './report',
+      });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+  async sendAssignUser(email: string, task: Task): Promise<void> {
+    const templateLetter = `
+  <div style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; border-radius: 8px;">
+    <h1 style="color: #333; text-align: center; text-decoration: underline;">Tên nhiệm: ${task.name}</h1>
+    <div style="background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+      <p style="font-size: 16px; color: #555;">Mô tả nhiệm vụ: ${task.description}</p>
+      <p style="font-size: 16px; color: #555;">Độ ưu tiên: ${task.priority}</p>
+      <p style="font-size: 16px; color: #555;">Trạng thái: ${task.status}</p>
+    </div>
+  </div>
+`;
+
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject: 'Bạn được assign vào một task mới',
+        text: 'Bạn được assign vào một task mới',
+        html: templateLetter,
       });
     } catch (error) {
       throw new BadRequestException(error);

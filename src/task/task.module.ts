@@ -5,6 +5,7 @@ import { Task, TaskSchema } from './task.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Board, BoardSchema } from 'src/board/board.schema';
 import { User, UserSchema } from 'src/users/users.schema';
+import { MailService } from 'src/mail/mail.service';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -23,6 +24,6 @@ import { User, UserSchema } from 'src/users/users.schema';
     ]),
   ],
   controllers: [TaskController],
-  providers: [TaskService],
+  providers: [TaskService, MailService],
 })
 export class TaskModule {}

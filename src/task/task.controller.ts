@@ -7,17 +7,24 @@ import { Controller } from 'src/decorator/customController.decorator';
 import { EPriority, EStatus } from './task.schema';
 import { ApiQuery } from '@nestjs/swagger';
 import { randomAssignIds, randomDate, randomEnum } from 'src/utils/helper';
-import moment from 'moment';
+import { MailService } from 'src/mail/mail.service';
 @Controller('task')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly mailService: MailService,
+  ) {}
 
   @Post('/create')
-  create(
+  async create(
     @Query('boardId') boardId: string,
     @Body() createTaskDto: CreateTaskDto,
   ) {
-    return this.taskService.create(boardId, createTaskDto);
+    const newTask = await this.taskService.create(boardId, createTaskDto);
+    for (const user of newTask.assignIds) {
+      this.mailService.sendAssignUser(user.email, newTask);
+    }
+    return newTask;
   }
   @Post('/generate-task')
   async generateTask(

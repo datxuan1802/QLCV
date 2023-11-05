@@ -20,11 +20,13 @@ export class TaskService {
       .exec();
 
     const order: number = maxOrderTask ? maxOrderTask.order + 1 : 0;
-    return await this.taskRepository.create({
+    const newTask = await this.taskRepository.create({
       ...createTaskDto,
       boardId,
       order,
     });
+    await newTask.populate('assignIds', '_id name email');
+    return newTask;
   }
 
   async generate(generateTask: any) {
