@@ -3,7 +3,7 @@ import { MailService } from './../mail/mail.service';
 import { getObjectId } from './../utils/helper';
 import { WorkspacePermission } from './../workspace-permission/workspace-permission.schema';
 import { Workspace } from './workspaces.schema';
-import { Post, Body, Get, Query, Put, Req } from '@nestjs/common';
+import { Post, Body, Get, Query, Put, Req, Res } from '@nestjs/common';
 import { Controller } from 'src/decorator/customController.decorator';
 import { ApiBody } from '@nestjs/swagger';
 //mongo
@@ -115,6 +115,7 @@ export class WorkspacesController {
   @Public()
   async accessInvite(
     @Query('workspacePermissionId') workspacePermissionId: string,
+    @Res() res,
   ) {
     const accessInvite = await this.workspacePermissionService.update(
       workspacePermissionId,
@@ -125,7 +126,7 @@ export class WorkspacesController {
     if (accessInvite) {
       this.workspacesGateway.sendEventToClients(accessInvite);
     }
-    return accessInvite;
+    res.redirect('http://localhost:5173/active?invite=true');
   }
 
   // @Roles(UserRole.ADMIN,User.MANAGER)
