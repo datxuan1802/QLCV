@@ -61,6 +61,16 @@ export class WorkspacePermissionService {
       .exec();
   }
 
+  findByUserAndWorkspaceId(userId: string, workspaceId: string) {
+    return this.workspacePermissionModel
+      .findOne({
+        owner: getObjectId(userId),
+        user: getObjectId(userId),
+        workspace: getObjectId(workspaceId),
+      })
+      .exec();
+  }
+
   remove(id: number) {
     return `This action removes a #${id} workspacePermission`;
   }

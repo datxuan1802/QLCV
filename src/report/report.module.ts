@@ -7,6 +7,11 @@ import { Board, BoardSchema } from 'src/board/board.schema';
 import { Task, TaskSchema } from 'src/task/task.schema';
 import { User, UserSchema } from 'src/users/users.schema';
 import { MailService } from 'src/mail/mail.service';
+import { WorkspacePermissionService } from 'src/workspace-permission/workspace-permission.service';
+import {
+  WorkspacePermission,
+  WorkspacePermissionSchema,
+} from 'src/workspace-permission/workspace-permission.schema';
 
 @Module({
   imports: [
@@ -23,9 +28,13 @@ import { MailService } from 'src/mail/mail.service';
         name: User.name,
         schema: UserSchema,
       },
+      {
+        name: WorkspacePermission.name,
+        schema: WorkspacePermissionSchema,
+      },
     ]),
   ],
   controllers: [ReportController],
-  providers: [ReportService, MailService],
+  providers: [ReportService, MailService, WorkspacePermissionService],
 })
 export class ReportModule {}

@@ -38,3 +38,20 @@ export const randomDate = () => {
   dueDate.setDate(startDate.getDate() + randomDays);
   return dueDate;
 };
+
+export const reduceTasksByStartDate = (tasks: any, startDate: any) => {
+  const counts = {};
+
+  tasks.forEach((task) => {
+    const doneAt = new Date(task.doneAt) as any;
+    const doneAtDate = new Date(startDate) as any;
+
+    if (doneAt >= doneAtDate) {
+      const hourDiff = Math.floor((doneAt - doneAtDate) / (1000 * 60 * 60));
+      counts[hourDiff] = (counts[hourDiff] || 0) + 1;
+    }
+  });
+
+  const result = Array.from({ length: 7 }, (_, index) => counts[index] || 0);
+  return result;
+};
