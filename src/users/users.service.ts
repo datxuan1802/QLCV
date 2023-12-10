@@ -6,6 +6,7 @@ import { User } from './users.schema';
 import { Model } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import CreateDtoFromGoogle from 'src/auth/dto/createDtoFromGoogle';
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
@@ -39,5 +40,11 @@ export class UsersService {
 
   async update(userId: string, updateUserDto: UpdateUserDto): Promise<any> {
     return this.userModel.findByIdAndUpdate(userId, updateUserDto).exec();
+  }
+
+  async createUserFromGoogle(
+    createUserFromGoogle: CreateDtoFromGoogle,
+  ): Promise<User> {
+    return this.userModel.create({ ...createUserFromGoogle });
   }
 }

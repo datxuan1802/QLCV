@@ -26,6 +26,11 @@ export class AuthController {
   login(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
+  @Public()
+  @Get('/login-with-google')
+  loginWithGoogle(@Query('access_token') accessToken: string) {
+    return this.authService.signInWithGoogle(accessToken);
+  }
 
   @Public()
   @Post('register')

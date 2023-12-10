@@ -6,6 +6,8 @@ import { User } from 'src/users/users.schema';
 import RegisterDto from './dto/registerDto';
 import { BadRequestException } from '@nestjs/common';
 import { MailService } from 'src/mail/mail.service';
+import { uuid } from 'uuidv4';
+import { UserRole } from 'src/enums/role.enum';
 @Injectable()
 export class AuthService {
   constructor(
@@ -44,6 +46,71 @@ export class AuthService {
       },
     };
   }
+  // TODO: OPTIMIZE LATER
+  async signInWithGoogle(accessToken: string): Promise<any> {
+    try {
+      const response = await fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            Accept: 'application/json',
+          },
+        },
+      );
+
+      if (response.ok) {
+        const userInfo = await response.json();
+        const existUser = await this.usersService.findByEmail(userInfo.email);
+        if (existUser) {
+          // return access_token
+          const payload = {
+            name: existUser.name,
+            roles: existUser.roles,
+            email: userInfo.email,
+            _id: existUser._id,
+          };
+          return {
+            access_token: await this.jwtService.signAsync(payload),
+            user: {
+              name: existUser.name,
+              email: existUser.email,
+              _id: existUser._id,
+              roles: existUser.roles,
+            },
+          };
+        } else {
+          // create new user
+          const newUser = await this.usersService.createUserFromGoogle({
+            name: userInfo?.name,
+            email: userInfo?.email,
+            password: uuid(),
+            roles: [UserRole.MEMBER],
+            isActivated: true,
+            avatar: userInfo.picture,
+          });
+          return {
+            access_token: await this.jwtService.signAsync({
+              name: newUser.name,
+              roles: newUser.roles,
+              email: newUser.email,
+              _id: newUser._id,
+            }),
+            user: {
+              name: newUser.name,
+              email: newUser.email,
+              _id: newUser._id,
+              roles: newUser.roles,
+            },
+          };
+        }
+      } else {
+        console.error('Error fetching user info:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  }
   async register(registerDto: RegisterDto): Promise<User> {
     try {
       const newUser = await this.usersService.create(registerDto);
@@ -56,7 +123,6 @@ export class AuthService {
       throw new BadRequestException(error.message);
     }
   }
-
   async activeAccountByToken(token: string): Promise<any> {
     try {
       return await this.usersService.activeToken(token);
