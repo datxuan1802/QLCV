@@ -129,6 +129,15 @@ export class WorkspacesController {
     res.redirect('http://localhost:5173/active?invite=true');
   }
 
+  @Get('/permission')
+  async getPermission(@Query('workspaceId') workspaceId: string, @Req() req) {
+    const permission = await this.workspacePermissionService.getPermission(
+      req.user._id,
+      workspaceId,
+    );
+    return permission;
+  }
+
   // @Roles(UserRole.ADMIN,User.MANAGER)
   // @ApiBody({ type: updateWorkspaceDTO})
 }

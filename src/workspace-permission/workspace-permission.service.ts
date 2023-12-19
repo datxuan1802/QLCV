@@ -74,4 +74,8 @@ export class WorkspacePermissionService {
   remove(id: number) {
     return `This action removes a #${id} workspacePermission`;
   }
+  async getPermission(userId: string, workspaceId: string) {
+    const permission = await this.findByUserAndWorkspaceId(userId, workspaceId);
+    return permission;
+  }
 }
