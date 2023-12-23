@@ -33,7 +33,6 @@ export class WorkspacesController {
   ) {}
   @ApiBody({ type: createWorkspaceDTO })
   @Post('/create')
-  @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async create(@Req() req, @Body() createWorkspaceDTO: createWorkspaceDTO) {
     const workspace = await this.workspaceService.create(
       req.user._id,
@@ -51,7 +50,7 @@ export class WorkspacesController {
   }
 
   @Get('/all')
-  @Roles(UserRole.ADMIN)
+  // @Roles(UserRole.ADMIN)
   findAll() {
     return this.workspaceService.findAll();
   }
@@ -75,7 +74,7 @@ export class WorkspacesController {
     return this.workspacePermissionService.getMembersByWorkspaceId(workspaceId);
   }
   @Put('/update')
-  @Roles(UserRole.ADMIN, UserRole.MANAGER)
+  // @Roles(UserRole.ADMIN, UserRole.MANAGER)
   update(
     @Req() req,
     @Query('workspaceId') workspaceId: string,
@@ -89,7 +88,7 @@ export class WorkspacesController {
   }
 
   @Post('/invite-member')
-  @Roles(UserRole.ADMIN, UserRole.MANAGER)
+  // @Roles(UserRole.ADMIN, UserRole.MANAGER)
   async assignMember(
     @Req() req,
     @Query('workspaceId') workspaceId: string,
