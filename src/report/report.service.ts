@@ -26,13 +26,11 @@ export class ReportService {
 
     const dateRangeCondition: any = {};
 
-    if (startDate) {
-      dateRangeCondition.dueDate = { $gte: startDate };
-    }
-
-    if (dueDate) {
+    if (startDate && dueDate) {
+      dateRangeCondition.startDate = { $gte: startDate };
       dateRangeCondition.dueDate = { $lte: dueDate };
     }
+
     const filteredConditions = {
       assignIds: id,
       ...(boardId && { boardId }),
@@ -53,13 +51,9 @@ export class ReportService {
     const { dueDate, startDate } = queryConditions;
 
     const dateRangeCondition: any = {};
-    if (startDate) {
-      dateRangeCondition.dueDate = { $gte: startDate };
+    if (startDate && dueDate) {
+      dateRangeCondition.dueDate = { $gte: startDate, $lte: dueDate };
     }
-    if (dueDate) {
-      dateRangeCondition.dueDate = { $lte: dueDate };
-    }
-
     const filteredConditions = {
       assignIds: assignId,
       boardId,
@@ -178,6 +172,25 @@ export class ReportService {
       }),
     );
     return result;
+  }
+
+  async reportTeams(boardId: string, queryConditions: any) {
+    const { startDate, dueDate, priority, status } = queryConditions;
+    const dateRangeCondition: any = {};
+
+    if (startDate && dueDate) {
+      dateRangeCondition.startDate = { $gte: startDate };
+      dateRangeCondition.dueDate = { $lte: dueDate };
+    }
+
+    const filteredConditions = {
+      ...(priority && { priority }),
+      ...(status && { status }),
+    };
+    return this.taskRepository
+      .find({ boardId, ...filteredConditions, ...dateRangeCondition })
+      .populate('assignIds', 'name avatar email')
+      .exec();
   }
 
   @Cron(CronExpression.EVERY_WEEKEND, {

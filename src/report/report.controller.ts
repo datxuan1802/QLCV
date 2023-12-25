@@ -122,4 +122,43 @@ export class ReportController {
     }
     return this.reportService.getDoneTaskByMember(req.user._id, boardId);
   }
+
+  @Get('/teams')
+  @ApiQuery({
+    name: 'boardId',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'dueDate',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'startDate',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'priority',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+  })
+  getTeamReport(
+    // @Req() req,
+    @Query('board_id') boardId?: string,
+    @Query('dueDate') dueDate?: Date,
+    @Query('startDate') startDate?: Date,
+    @Query('priority') priority?: string,
+    @Query('status') status?: string,
+  ) {
+    const searchOptions = {
+      dueDate,
+      startDate,
+      priority,
+      status,
+    };
+
+    return this.reportService.reportTeams(boardId, searchOptions);
+  }
 }
