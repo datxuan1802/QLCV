@@ -106,7 +106,7 @@ export class WorkspacesController {
     const newPermission = await this.workspacePermissionService.create(
       WorkspacePermissionDTO,
     );
-    await this.mailService.sendAccessInvite(email, newPermission._id);
+    await this.mailService.sendAccessInvite(email, newPermission._id as string);
     return newPermission;
   }
 
