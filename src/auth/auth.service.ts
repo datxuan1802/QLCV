@@ -114,11 +114,11 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<User> {
     try {
       const newUser = await this.usersService.create(registerDto);
-      // await this.mailService.sendActivationEmail(
-      //   newUser.email,
-      //   newUser.activeToken,
-      // );
-      // console.log(newUser, 'user');
+      await this.mailService.sendActivationEmail(
+        newUser.email,
+        newUser.activeToken,
+      );
+      console.log(newUser, 'user');
       return newUser;
     } catch (error) {
       throw new BadRequestException(error.message);
