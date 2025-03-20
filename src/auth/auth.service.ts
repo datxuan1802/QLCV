@@ -114,12 +114,10 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<User> {
     try {
       const newUser = await this.usersService.create(registerDto);
-      if (!!newUser) {
-        const send_email = await this.mailService.sendActivationEmail(
-          newUser.email,
-          newUser.activeToken,
-        );
-      }
+      const send_email = await this.mailService.sendActivationEmail(
+        newUser.email,
+        newUser.activeToken,
+      );
       return newUser;
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -127,9 +125,13 @@ export class AuthService {
   }
   async activeAccountByToken(token: string): Promise<any> {
     try {
-      return await this.usersService.activeToken(token);
+      const res = await this.usersService.activeToken(token);
+      return res;
     } catch (error) {
-      throw new BadRequestException(error);
+      console.error('Lỗi khi kích hoạt tài khoản:', error);
+      throw new BadRequestException(
+        error.message || 'get error when active account',
+      );
     }
   }
   async findUserByEmail(email: string): Promise<User> {

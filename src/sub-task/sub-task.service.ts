@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Delete } from '@nestjs/common';
 import { CreateSubTaskDto } from './dto/create-sub-task.dto';
 import { UpdateSubTaskDto } from './dto/update-sub-task.dto';
 import { SubTask } from './sub-task.schema';
@@ -27,5 +27,9 @@ export class SubTaskService {
 
   async findByTaskId(taskId: string) {
     return await this.subTaskRepository.find({ task: taskId });
+  }
+
+  async Delete(taskId: string) {
+    return await this.subTaskRepository.deleteOne({ taskId: taskId });
   }
 }

@@ -1,6 +1,6 @@
 import { Controller } from 'src/decorator/customController.decorator';
 import { SubTaskService } from './sub-task.service';
-import { Body, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateSubTaskDto } from './dto/create-sub-task.dto';
 import { UpdateSubTaskDto } from './dto/update-sub-task.dto';
 
@@ -27,5 +27,10 @@ export class SubTaskController {
     @Body() updateSubTaskDto: UpdateSubTaskDto,
   ) {
     return this.subTaskService.update(subTaskId, updateSubTaskDto);
+  }
+
+  @Delete('/delete/:taskId')
+  Delete(@Param('taskId') taskId: string) {
+    return this.subTaskService.Delete(taskId);
   }
 }

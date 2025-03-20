@@ -100,13 +100,13 @@ export class WorkspacesController {
       owner: new Types.ObjectId(req.user._id),
       workspace: new Types.ObjectId(workspaceId),
       roles: [UserRole.MEMBER],
-      isAccessInvite: true,
+      isAccessInvite: false,
     };
 
     const newPermission = await this.workspacePermissionService.create(
       WorkspacePermissionDTO,
     );
-    // await this.mailService.sendAccessInvite(email, newPermission._id as string);
+    await this.mailService.sendAccessInvite(email, newPermission._id as string);
     return newPermission;
   }
 
