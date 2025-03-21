@@ -6,10 +6,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ETimeDoneTask, Task } from './task.schema';
 import { EStatus } from './task.schema';
 import { getObjectId } from 'src/utils/helper';
+import { UsersService } from 'src/users/users.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class TaskService {
-  constructor(@InjectModel(Task.name) private taskRepository: Model<Task>) {}
+  constructor(
+    @InjectModel(Task.name) private taskRepository: Model<Task>,
+    private usersService: UsersService,
+    private mailService: MailService,
+  ) {}
 
   async create(boardId: string, createTaskDto: CreateTaskDto) {
     const maxOrderTask = await this.taskRepository
@@ -25,7 +31,13 @@ export class TaskService {
       boardId,
       order,
     });
-    await newTask.populate('assignIds', '_id name email');
+    const user_new = await this.usersService.findById(
+      String(newTask.assignIds[0]),
+    );
+    if (user_new) {
+      await this.mailService.sendAssignUser(user_new.email, newTask);
+    }
+    const user = await newTask.populate('assignIds', '_id name email');
     return newTask;
   }
 

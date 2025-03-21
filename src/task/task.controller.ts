@@ -23,12 +23,13 @@ export class TaskController {
     @Body() createTaskDto: CreateTaskDto,
   ) {
     const newTask = await this.taskService.create(boardId, createTaskDto);
-    if (newTask.assignIds) {
-      const user = await this.UsersService.findById(newTask[0].assignIds);
-      if (user) {
-        await this.mailService.sendAssignUser(user.email, newTask);
-      }
-    }
+    // if (newTask) {
+    //   const user = await this.UsersService.findById(newTask.assignIds[0]);
+    //   if (user) {
+    //     await this.mailService.sendAssignUser(user.email, newTask);
+    //   }
+    // }
+
     return newTask;
   }
   @Post('/generate-task')
