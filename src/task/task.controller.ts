@@ -22,7 +22,7 @@ export class TaskController {
   ) {
     const newTask = await this.taskService.create(boardId, createTaskDto);
     for (const user of newTask.assignIds) {
-      this.mailService.sendAssignUser(user.email, newTask);
+      await this.mailService.sendAssignUser(user.email, newTask);
     }
     return newTask;
   }
