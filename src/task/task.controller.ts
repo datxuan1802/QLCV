@@ -8,11 +8,13 @@ import { EPriority, EStatus } from './task.schema';
 import { ApiQuery } from '@nestjs/swagger';
 import { randomAssignIds, randomDate, randomEnum } from 'src/utils/helper';
 import { MailService } from 'src/mail/mail.service';
+import { UsersService } from 'src/users/users.service';
 @Controller('task')
 export class TaskController {
   constructor(
     private readonly taskService: TaskService,
     private readonly mailService: MailService,
+    private readonly UsersService: UsersService,
   ) {}
 
   @Post('/create')
@@ -21,8 +23,11 @@ export class TaskController {
     @Body() createTaskDto: CreateTaskDto,
   ) {
     const newTask = await this.taskService.create(boardId, createTaskDto);
-    for (const user of newTask.assignIds) {
-      await this.mailService.sendAssignUser(user.email, newTask);
+    if (newTask.assignIds) {
+      const user = await this.UsersService.findById(newTask[0].assignIds);
+      if (user) {
+        await this.mailService.sendAssignUser(user.email, newTask);
+      }
     }
     return newTask;
   }
