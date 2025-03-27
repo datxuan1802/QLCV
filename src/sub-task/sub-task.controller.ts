@@ -29,7 +29,7 @@ export class SubTaskController {
     return this.subTaskService.update(subTaskId, updateSubTaskDto);
   }
 
-  @Delete('/delete/:taskId')
+  @Delete('/delete')
   Delete(@Param('taskId') taskId: string) {
     return this.subTaskService.Delete(taskId);
   }
