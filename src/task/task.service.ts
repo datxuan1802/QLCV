@@ -114,7 +114,7 @@ export class TaskService {
     }
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return this.taskRepository.deleteOne({ id: id });
   }
 }
