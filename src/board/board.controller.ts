@@ -40,6 +40,6 @@ export class BoardController {
 
   @Delete('/delete')
   remove(@Param('id') id: string) {
-    return this.boardService.remove(+id);
+    return this.boardService.remove(id);
   }
 }
