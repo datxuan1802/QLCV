@@ -30,7 +30,7 @@ export class BoardController {
     return this.boardService.findOne(boardId);
   }
 
-  @Patch(':boardId')
+  @Patch('update')
   update(
     @Param('boardId') boardId: string,
     @Body() updateBoardDto: UpdateBoardDto,
