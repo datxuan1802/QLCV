@@ -32,7 +32,7 @@ export class BoardController {
 
   @Patch('update')
   update(
-    @Param('boardId') boardId: string,
+    @Query('boardId') boardId: string,
     @Body() updateBoardDto: UpdateBoardDto,
   ) {
     return this.boardService.update(boardId, updateBoardDto);
