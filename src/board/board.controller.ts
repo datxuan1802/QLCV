@@ -38,8 +38,8 @@ export class BoardController {
     return this.boardService.update(boardId, updateBoardDto);
   }
 
-  @Delete('/delete')
-  remove(@Query('id') id: string) {
+  @Delete('/delete/:id')
+  remove(@Param('id') id: string) {
     return this.boardService.remove(id);
   }
 }
