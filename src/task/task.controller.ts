@@ -96,7 +96,7 @@ export class TaskController {
   }
 
   @Delete('/delete')
-  Delete(@Param('id') id: string) {
+  Delete(@Query('id') id: string) {
     return this.taskService.remove(id);
   }
 }
