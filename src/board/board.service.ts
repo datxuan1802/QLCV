@@ -40,7 +40,7 @@ export class BoardService {
     return this.boardRepository.findByIdAndUpdate(boardId, updateBoardDto);
   }
 
-  remove(id: string) {
-    return this.boardRepository.deleteOne({ _id: id });
+  remove(boardId: string) {
+    return this.boardRepository.deleteOne({ _id: getObjectId(boardId) });
   }
 }

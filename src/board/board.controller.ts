@@ -38,8 +38,9 @@ export class BoardController {
     return this.boardService.update(boardId, updateBoardDto);
   }
 
-  @Delete('/delete/:id')
-  remove(@Param('id') id: string) {
-    return this.boardService.remove(id);
+  @Delete('/delete')
+  Delete(@Query('boardId') boardId: string) {
+    console.log(boardId,'board');
+    return this.boardService.remove(boardId);
   }
 }
