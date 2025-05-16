@@ -41,6 +41,6 @@ export class BoardService {
   }
 
   remove(id: string) {
-    return this.boardRepository.deleteOne({ id: id });
+    return this.boardRepository.deleteOne({ _id: id });
   }
 }
