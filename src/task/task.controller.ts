@@ -95,7 +95,7 @@ export class TaskController {
     return this.taskService.updateStatus(taskId, status);
   }
 
-  @Delete('/delete/:taskId')
+  @Delete('/delete')
   Delete(@Param('taskId') taskId: string) {
     return this.taskService.remove(taskId);
   }
